@@ -4,18 +4,19 @@ class WeatherService:
     def __init__(self, url):
         self.__url = url
 
-    def get_key_for_url(self, key):
-        if key in self.__url[key]:
+    def __get_key_for_url(self, key):
+        if key in self.__url:
             return self.__url[key]
 
-    def get_url(self):
-        return self.get_key_for_url("template")
+    def get_url_template(self):
+        return self.__get_key_for_url("template")
 
     def get_url_params(self):
-        return self.get_key_for_url("payload")
+        return self.__get_key_for_url("payload")
 
     def get_weather(self, city):
-        url_weather = self.get_url().format(city)   
+        # явно преобразуем в string. чтобы убрать сообщение об ошибке
+        url_weather = str(self.get_url_template()).format(city)   
 
         response = requests.get(url_weather, self.get_url_params())
         response.raise_for_status()
